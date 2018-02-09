@@ -21,17 +21,9 @@ function PlayerService(callback) {
     this.getMyTeam = function() {
       return JSON.parse(JSON.stringify(myTeam))
     }
-    
-    this.getPlayersByTeam = function(teamName) {
-        return playersData.filter(function(player) {
-          return player.pro_team == teamName
-        });
-      }
-    
-    this.getPlayersByPosition = function(position) {
-      return playersData.filter(function(player) {
-        return player.position == position
-      });
+
+    this.getPlayers = function() {
+      return JSON.parse(JSON.stringify(playersData))
     }
     
     this.loadPlayersData = function(callback) {
@@ -61,5 +53,28 @@ function PlayerService(callback) {
           callback()
         });
     }
+
+    this.getTeamAbbreviations = function() {
+      var teamAbbrevs = []
+      playersData.forEach( player => {
+        var teamAbbrev = player.pro_team
+        if (!teamAbbrevs.includes(teamAbbrev)) {
+          teamAbbrevs.push(teamAbbrev)
+        }
+      })
+      return teamAbbrevs
+    }
+
+    this.getPositionAbbreviations = function() {
+      var positionAbbrevs = []
+      playersData.forEach( player => {
+        var positionAbbrev = player.position
+        if (!positionAbbrevs.includes(positionAbbrev) && positionAbbrev !== "") {
+          positionAbbrevs.push(positionAbbrev)
+        }
+      })
+      return positionAbbrevs
+    }
+
 
 } 

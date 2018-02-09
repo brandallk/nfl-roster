@@ -20,10 +20,18 @@
                 <div class="getRoster">
                     <form action="" class="rosterByTeam">
                         <div class="form-group">
-                            <label for="teamName">Team name abbr. (e.g. TEN)</label>
-                            <input type="text" class="form-control" id="teamName" placeholder="Team name">
-                            <button type="submit" class="getRosterByTeam btn btn-primary">GO</button>
+                            <label for="teamName">Team name: </label>
+                            <select id="teamName"></select>
                         </div>
+                        <div class="form-group positionName">
+                            <label for="positionName">Player position: </label>
+                            <select id="positionName"></select>
+                        </div>
+                        <div class="form-group playerName">
+                            <label for="playerName">Player full name (e.g. Manny Abad)</label>
+                            <input type="text" class="form-control" id="playerName" placeholder="Player name">
+                        </div>
+                        <button type="submit" class="getRoster btn btn-primary">GO</button>
                     </form>
                 </div>
             </div>            
