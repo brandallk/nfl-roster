@@ -49,18 +49,41 @@ var PlayerController = function() {
 
     $rosterDiv.html(template)
 
-    Array.from(document.querySelectorAll('button.addToTeam')).forEach( button => {
-      button.addEventListener('click', function(evt) {
-        playerService.addToTeam(this.getAttribute('data-playerID'))
-        drawMyTeam()
-      })
+    $('button.addToTeam').on('click', function() {
+      playerService.addToTeam($(this).attr('data-playerID'))
+      drawMyTeam()
     })
   }
 
   var drawMyTeam = function() {
-    var players = playerService.getMyTeam(); console.log(players)
-    //
-    //
+    var players = playerService.getMyTeam();
+    
+    var $teamDiv = $("div.my-team .card-deck")
+
+    var template = ""
+
+    players.forEach( player => {
+      template += `
+        <div class="card player-card">
+          <div class="card-body p-3">
+              <div class="d-inline-block border border-dark">
+                  <img src="${player.photo}" alt="">
+                  <p class="player-name">${player.fullname}</p>
+                  <p class="player-position">${player.position}</p>
+                  <p class="player-team">${player.pro_team}</p>
+                  <button class="removeFromTeam btn btn-danger px-3 mt-2" data-playerID="${player.id}">Remove from Team</button>
+              </div>
+            </div>
+        </div>
+      `
+    })
+
+    $teamDiv.html(template)
+
+    $('button.removeFromTeam').on('click', function() {
+      playerService.removeFromTeam($(this).attr('data-playerID'))
+      drawMyTeam()
+    })
   }
 
   playerService.loadPlayersData(ready) //call the function above every time we create a new service

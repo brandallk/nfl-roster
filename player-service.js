@@ -4,8 +4,18 @@ function PlayerService(callback) {
     var myTeam = []
 
     this.addToTeam = function(playerID) {
-      //
-      //
+      var player = myTeam.find( player => player.id === playerID )
+      if (!myTeam.includes(player)) {
+        myTeam.push(playersData.find( player => player.id === playerID ))
+      }
+    }
+
+    this.removeFromTeam = function(playerID) {    
+      var player = myTeam.find( player => player.id === playerID )  
+      if (myTeam.includes(player)) {
+        var playerIndex = myTeam.indexOf(player)
+        myTeam.splice(playerIndex, 1)
+      }
     }
 
     this.getMyTeam = function() {
