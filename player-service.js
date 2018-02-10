@@ -4,8 +4,9 @@ function PlayerService(callback) {
     var myTeam = []
 
     this.addToTeam = function(playerID) {
-      var player = myTeam.find( player => player.id === playerID )
-      if (!myTeam.includes(player)) {
+      var player = playersData.find( player => player.id === playerID )
+      var positionsOnTeam = myTeam.map( player => player.position)
+      if (!myTeam.includes(player) && myTeam.length < 10 && !positionsOnTeam.includes(player.position)) {
         myTeam.push(playersData.find( player => player.id === playerID ))
       }
     }
@@ -45,13 +46,20 @@ function PlayerService(callback) {
       var apiUrl = url + encodeURIComponent(endpointUri);
     
         $.getJSON(apiUrl, function(data){
-          playersData = data.body.players;
+          playersData = removeInvalidPositions(data.body.players);
           console.log('Player Data Ready')
           console.log('Writing Player Data to localStorage')
           localStorage.setItem('playersData', JSON.stringify(playersData))
           console.log('Finished Writing Player Data to localStorage')
           callback()
         });
+    }
+
+    var removeInvalidPositions = function(players) {
+      var invalidPositions = ["", "TQB", "D", "ST", "DST"]
+      return players.filter( player => {
+        return !invalidPositions.includes(player.position)
+      })
     }
 
     this.getTeamAbbreviations = function() {
@@ -69,7 +77,7 @@ function PlayerService(callback) {
       var positionAbbrevs = []
       playersData.forEach( player => {
         var positionAbbrev = player.position
-        if (!positionAbbrevs.includes(positionAbbrev) && positionAbbrev !== "") {
+        if (!positionAbbrevs.includes(positionAbbrev)) {
           positionAbbrevs.push(positionAbbrev)
         }
       })

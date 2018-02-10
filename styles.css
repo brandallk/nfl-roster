@@ -2,3 +2,27 @@
 div.player-card {
     min-width: 25%;
 }
+
+.loading-spinner-backdrop {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    opacity:0.75;
+}
+
+@keyframes spin {
+    0%   { transform: rotate(0deg) }
+    100% { transform: rotate(360deg) }
+}
+
+.loading-spinner.spinning {
+    animation: spin 3s infinite;
+    animation-timing-function: linear;
+}
+
+.player-card img {
+    width: 93%;
+    max-width: 160px;
+}
