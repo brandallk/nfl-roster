@@ -142,29 +142,29 @@ var PlayerController = function() {
   }
 
   var drawMyTeam = function() {
-    var players = playerService.getMyTeam();
+    var teamMembers = playerService.getMyTeam();
     var $teamDiv = $("div.my-team .player-cards")
     var template = ""
 
-    if (players.length) {
+    if (teamMembers.length) {
       $('div.my-team h2').removeClass('hidden')
     } else {
       $('div.my-team h2').addClass('hidden')
     }
 
-    players.forEach( player => {
-      if (player.photo.includes("unknown-player")) {
-        player.photo = "http://s.nflcdn.com/static/content/public/image/fantasy/transparent/200x200/"
+    teamMembers.forEach( member => {
+      if (member.player.photo.includes("unknown-player")) {
+        member.player.photo = "http://s.nflcdn.com/static/content/public/image/fantasy/transparent/200x200/"
       }
       template += `
       <div class="card player-card col-12 col-sm-6 col-md-4 col-lg-3 text-light">
           <div class="card-body p-3">
               <div class="d-inline-block border border-light rounded">
-                  <img class="card-image-top" src="${player.photo}" alt="">
-                  <p class="player-name"><strong>${player.fullname}</strong></p>
-                  <p class="player-position"><small>${player.position}</small></p>
-                  <p class="player-team"><small>${player.pro_team}</small></p>
-                  <button class="removeFromTeam btn btn-danger px-3" data-playerID="${player.id}">Remove</button>
+                  <img class="card-image-top" src="${member.player.photo}" alt="">
+                  <p class="player-name"><strong>${member.player.fullname}</strong></p>
+                  <p class="player-position"><small>${member.player.position}</small></p>
+                  <p class="player-team"><small>${member.player.pro_team}</small></p>
+                  <button class="removeFromTeam btn btn-danger px-3" data-playerID="${member.player.id}">Remove</button>
               </div>
             </div>
         </div>

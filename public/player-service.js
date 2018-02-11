@@ -1,14 +1,61 @@
 
 function PlayerService(callback) {
     var playersData = []
-    var myTeam = []
+    var myTeam =
+    [
+      {position: "QB", player: {filled: false}},
+      {position: "RB", player: {filled: false}},
+      {position: "RB", player: {filled: false}},
+      {position: "Flex", player: {filled: false}},
+      {position: "WR", player: {filled: false}},
+      {position: "WR", player: {filled: false}},
+      {position: "TE", player: {filled: false}},
+      {position: "K", player: {filled: false}},
+      {position: "D", player: {filled: false}},
+      {position: "D", player: {filled: false}},
+      {position: "D", player: {filled: false}}
+    ]
+    
+    function addTeamPosition(player) {
+      function getAvailablePositions(player) {
+        return myTeam.filter( pos => {
+          if (['RB', 'WR', 'TE'].includes(player.position)) {
+            return pos.position === "Flex" && !pos.player.filled ||
+                   pos.position === player.position && !pos.player.filled
+          }
+          if (['LB', 'DL', 'DB'].includes(player.position)) {
+            return pos.position === "D" && !pos.player.filled
+          }
+          return pos.position === player.position && !pos.player.filled
+        })
+      }
+
+      function addToPosition(position) {
+        var teamPosition = myTeam.find( pos => pos.position === position && !pos.player.filled )
+        teamPosition.player = player
+        teamPosition.player.filled = true
+      }
+      console.log(getAvailablePositions(player))
+      if (getAvailablePositions(player).length > 0) {
+        if (['LB', 'DL', 'DB'].includes(player.position)) {
+          if (getAvailablePositions(player).find( pos => pos.position === 'D' )) {
+            addToPosition('D')
+            return true
+          }
+        } else if (['RB', 'WR', 'TE'].includes(player.position) && getAvailablePositions(player).find( pos => pos.position === 'Flex' )) {
+          addToPosition('Flex')
+          return true
+        } else if (getAvailablePositions(player).find( pos => pos.position === player.position )) {
+          addToPosition(player.position)
+          return true
+        }
+      }
+    }
 
     this.addToTeam = function(playerID) {
       var player = playersData.find( player => player.id === playerID )
-      var positionsOnTeam = myTeam.map( player => player.position)
-      if (!myTeam.includes(player) && myTeam.length < 10 && !positionsOnTeam.includes(player.position)) {
-        myTeam.push(playersData.find( player => player.id === playerID ))
 
+      if (addTeamPosition(player)) {
         var playerData = {
           apiID: player.id,
           fullname: player.fullname,
@@ -35,23 +82,22 @@ function PlayerService(callback) {
     }
 
     this.removeFromTeam = function(playerID) {
-      var player = myTeam.find( player => player.id == playerID )
-      if (myTeam.includes(player)) {
-        var playerIndex = myTeam.indexOf(player)
-        myTeam.splice(playerIndex, 1)
-        
+      var position = myTeam.find( pos => pos.player.id == playerID)
+      if (myTeam.includes(position)) {
         $.ajax({
-          url: '/team/' + player.id,
+          url: '/team/' + position.player.id,
           type: 'DELETE',
           success: function(response) {
             console.log( 'Data deleted: ' + response )
           }
         })
+        position.player = {filled: false}
       }
     }
 
     this.getMyTeam = function() {
-      return JSON.parse(JSON.stringify(myTeam))
+      var filledPositions = myTeam.filter( pos => pos.player.filled)
+      return JSON.parse(JSON.stringify(filledPositions))
     }
 
     this.setMyTeam = function(callback) {
@@ -62,7 +108,7 @@ function PlayerService(callback) {
           console.log( 'Data received: ', storedPlayers )
           storedPlayers.forEach( player => {
             player.id = player.apiID
-            myTeam.push(player)
+            addTeamPosition(player)
           })
           callback()
         }
