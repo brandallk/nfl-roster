@@ -22,9 +22,8 @@ var PlayerController = function() {
       ]
 
       var searchResults = searchPlayers(filtersArr)
-      var paginatedResults = paginate(searchResults, 15)
+      var paginatedResults = paginate(searchResults, 6)
       drawSearchResults(paginatedResults, 0)
-      // drawSearchResults(searchResults)
 
     })
   }
@@ -38,7 +37,7 @@ var PlayerController = function() {
   }
 
   var drawLoadingAnimation = function() {
-    var $formDiv = $('div.getRoster')
+    var $formDiv = $('div.get-roster')
     var newDiv = `
       <div class="loading-spinner-backdrop bg-light d-flex justify-content-center align-items-center">
         <i class="loading-spinner spinning fas fa-spinner fa-4x"></i>
@@ -92,20 +91,18 @@ var PlayerController = function() {
         })
       }
     })
-
     return players
   }
 
-  // var drawSearchResults = function(players) {  
   var drawSearchResults = function(paginatedPlayers, pageNumber) {
     var players = paginatedPlayers[pageNumber]
-    // figure out how to click buttons and switch to different pages of paginated results...
     
     var $rosterDiv = $('div.player-roster .list-group')
+    $('div.pagination-buttons').remove()
     var template = ""
 
-    if (players.length == 0) {
-      $rosterDiv.html(`<div><h1 class="text-center">Search returned no results. Try again.</h1></div>`)
+    if (!players || players.length === 0) {
+      $rosterDiv.html(`<div class="bg-danger rounded py-3"><h1 class="text-center text-light">Search returned no results. Try again.</h1></div>`)
     } else {
       players.forEach( player => {
         template += `
@@ -115,54 +112,69 @@ var PlayerController = function() {
               <span class="player-position mr-3" style="white-space: nowrap"><small>position: </small>${player.position}</span>
               <span class="player-team" style="white-space: nowrap"><small>team: </small>${player.pro_team}</span>
             </div>
-            <button class="addToTeam btn btn-success px-3 mt-2" data-playerID="${player.id}">Add to Team</button>
+            <button class="addToTeam btn btn-primary px-3 mt-2" data-playerID="${player.id}">Add to Team</button>
           </li>
         `
-      })
-  
+      })  
       $rosterDiv.html(template)
-
-      var nextPageBtn = `<button class="get-next-page btn btn-success my-5">Next Page</button>`
-      $('div.player-roster').append(nextPageBtn)
   
       $('button.addToTeam').on('click', function() {
         playerService.addToTeam($(this).attr('data-playerID'))
         drawMyTeam()
       })
-    }
+      
+      var nextPageBtnDiv = `<div class="pagination-buttons text-center"></div>`
+      $('div.player-roster').append(nextPageBtnDiv)
 
+      if (paginatedPlayers[pageNumber + 1]) {
+        var prevPageBtn = `<button class="get-next-page btn btn-primary my-5">Next &#9654;</button>`
+        $('div.pagination-buttons').prepend(prevPageBtn)
+      }
+      if (paginatedPlayers[pageNumber - 1]) {
+        var prevPageBtn = `<button class="get-prev-page btn btn-primary my-5 mr-4">&#9664; Back</button>`
+        $('div.pagination-buttons').prepend(prevPageBtn)
+      }
+  
+      $('button.get-next-page').on('click', function() {
+        drawSearchResults(paginatedPlayers, pageNumber + 1)
+      })
+
+      $('button.get-prev-page').on('click', function() {
+        drawSearchResults(paginatedPlayers, pageNumber - 1)
+      })
+    }
   }
 
   var drawMyTeam = function() {
     var players = playerService.getMyTeam();
-    
-    // var $teamDiv = $("div.my-team .card-deck")
     var $teamDiv = $("div.my-team .player-cards")
-
     var template = ""
+
+    if (players.length) {
+      $('div.my-team h2').removeClass('hidden')
+    } else {
+      $('div.my-team h2').addClass('hidden')
+    }
 
     players.forEach( player => {
       if (player.photo.includes("unknown-player")) {
         player.photo = "http://s.nflcdn.com/static/content/public/image/fantasy/transparent/200x200/"
       }
-
       template += `
-      <div class="card player-card col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="card player-card col-12 col-sm-6 col-md-4 col-lg-3 text-light">
           <div class="card-body p-3">
-              <div class="d-inline-block border border-dark">
+              <div class="d-inline-block border border-light rounded">
                   <img class="card-image-top" src="${player.photo}" alt="">
-                  <p class="player-name">${player.fullname}</p>
-                  <p class="player-position">${player.position}</p>
-                  <p class="player-team">${player.pro_team}</p>
-                  <button class="removeFromTeam btn btn-danger px-3 mt-2" data-playerID="${player.id}">Remove from Team</button>
+                  <p class="player-name"><strong>${player.fullname}</strong></p>
+                  <p class="player-position"><small>${player.position}</small></p>
+                  <p class="player-team"><small>${player.pro_team}</small></p>
+                  <button class="removeFromTeam btn btn-danger px-3" data-playerID="${player.id}">Remove</button>
               </div>
             </div>
         </div>
       `
     })
-
     $teamDiv.html(template)
-
     $('button.removeFromTeam').on('click', function() {
       playerService.removeFromTeam($(this).attr('data-playerID'))
       drawMyTeam()

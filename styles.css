@@ -1,6 +1,28 @@
 
+.hidden {
+    display: none;
+}
+
+body {
+    background: linear-gradient(
+        rgb(3, 153, 194),
+        rgb(2, 101, 128)
+    );
+    min-height: 100vh;
+}
+
+div.roster-header {
+    background-color: rgb(3,118,150);
+}
+
+div.get-roster {
+    /* background-image: url(https://cdn.dribbble.com/users/31664/screenshots/3532870/asset_1.png);
+    background-size: cover; */
+}
+
 div.player-card {
     min-width: 25%;
+    background-color: rgb(3,118,150);
 }
 
 .loading-spinner-backdrop {
@@ -25,4 +47,13 @@ div.player-card {
 .player-card img {
     width: 93%;
     max-width: 160px;
+}
+
+.player-card p {
+    margin-bottom: 0;
+}
+
+button.removeFromTeam {
+    width: 90%;
+    margin: 0.5rem 5%;
 }
