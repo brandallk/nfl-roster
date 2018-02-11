@@ -1,14 +1,10 @@
 
 var PlayerController = function() {
 
-  var loading = true; //Start the spinner
-
   var playerService = new PlayerService(ready);
   
   function ready() {
-    loading = false; //stop the spinner
     cancelLoadingAnimation()
-
     drawTeamDropdown()
     drawPositionDropdown()
 
@@ -182,6 +178,7 @@ var PlayerController = function() {
   }
 
   drawLoadingAnimation()
+  playerService.setMyTeam(drawMyTeam)
   playerService.loadPlayersData(ready) //call the function above every time we create a new service
 
 }

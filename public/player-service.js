@@ -8,19 +8,65 @@ function PlayerService(callback) {
       var positionsOnTeam = myTeam.map( player => player.position)
       if (!myTeam.includes(player) && myTeam.length < 10 && !positionsOnTeam.includes(player.position)) {
         myTeam.push(playersData.find( player => player.id === playerID ))
+
+        var playerData = {
+          apiID: player.id,
+          fullname: player.fullname,
+          firstname: player.firstname,
+          lastname: player.lastname,
+          position: player.position,
+          pro_team: player.pro_team,
+          photo: player.photo
+        }
+
+        $.ajax({
+          url: '/team', 
+          type: 'POST', 
+          contentType: 'application/json', 
+          data: JSON.stringify(playerData),
+          success: function(response) {
+            console.log( 'Data loaded: ' + response )
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.log( textStatus + ', ' + errorThrown, jqXHR.responseText )
+          }
+        })
       }
     }
 
-    this.removeFromTeam = function(playerID) {    
-      var player = myTeam.find( player => player.id === playerID )  
+    this.removeFromTeam = function(playerID) {
+      var player = myTeam.find( player => player.id == playerID )
       if (myTeam.includes(player)) {
         var playerIndex = myTeam.indexOf(player)
         myTeam.splice(playerIndex, 1)
+        
+        $.ajax({
+          url: '/team/' + player.id,
+          type: 'DELETE',
+          success: function(response) {
+            console.log( 'Data deleted: ' + response )
+          }
+        })
       }
     }
 
     this.getMyTeam = function() {
       return JSON.parse(JSON.stringify(myTeam))
+    }
+
+    this.setMyTeam = function(callback) {
+      $.ajax({
+        url: '/team',
+        type: 'GET',
+        success: function(storedPlayers) {
+          console.log( 'Data received: ', storedPlayers )
+          storedPlayers.forEach( player => {
+            player.id = player.apiID
+            myTeam.push(player)
+          })
+          callback()
+        }
+      })
     }
 
     this.getPlayers = function() {
@@ -83,6 +129,5 @@ function PlayerService(callback) {
       })
       return positionAbbrevs
     }
-
 
 } 
