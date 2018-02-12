@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const Team = require('./db').Team;
 
 const app = express()
-app.set('port', process.env.port || 3000)
+app.set('port', process.env.PORT || 5000)
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
