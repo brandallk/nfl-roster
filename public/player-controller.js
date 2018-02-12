@@ -91,7 +91,7 @@ var PlayerController = function() {
     var paginatedPlayers = []
     var numberOfPages = Math.ceil(players.length/paginationLength)
     for (var i = 1; i <= numberOfPages; i++) {
-      paginatedPlayers.unshift(players.slice( ((i-1) * paginationLength), (i * paginationLength) ) )
+      paginatedPlayers.push(players.slice( ((i-1) * paginationLength), (i * paginationLength) ) )
     }
     return paginatedPlayers
   }
