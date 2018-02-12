@@ -1,5 +1,7 @@
 #### Randy K.'s "NFL Roster" Checkpoint Project
 
+Demo: [https://radiant-spire-51553.herokuapp.com/](https://radiant-spire-51553.herokuapp.com/)
+
 Features:
 * Animated loading 'spinner' while loading the NFL API data
 * Can search for player(s) by any combination of team name, player position, and/or player name
