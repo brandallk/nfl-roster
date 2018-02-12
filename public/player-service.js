@@ -62,7 +62,7 @@ function PlayerService(callback) {
 
   // Filter empty or contrived player "positions" from player data (i.e. from the CBS Sports players data)
   function removeInvalidPositions(players) {
-    var invalidPositions = ["", "TQB", "D", "ST", "DST"]
+    var invalidPositions = ["", "TQB", "D", "ST", "DST", "C", "P"]
     return players.filter( player => {
       return !invalidPositions.includes(player.position)
     })
