@@ -1,30 +1,26 @@
 
+/* Utilities */
 .hidden {
     display: none;
 }
 
+/* General */
 body {
     background: linear-gradient(
         rgb(3, 153, 194),
         rgb(2, 101, 128)
     );
     min-height: 100vh;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
+/* Page header */
 div.roster-header {
     background-color: rgb(3,118,150);
 }
 
-div.get-roster {
-    /* background-image: url(https://cdn.dribbble.com/users/31664/screenshots/3532870/asset_1.png);
-    background-size: cover; */
-}
-
-div.player-card {
-    min-width: 25%;
-    background-color: rgb(3,118,150);
-}
-
+/* Loading 'spinner' */
 .loading-spinner-backdrop {
     position:absolute;
     top:0;
@@ -33,26 +29,27 @@ div.player-card {
     height:100%;
     opacity:0.75;
 }
-
 @keyframes spin {
     0%   { transform: rotate(0deg) }
     100% { transform: rotate(360deg) }
 }
-
 .loading-spinner.spinning {
     animation: spin 3s infinite;
     animation-timing-function: linear;
 }
 
+/* Team player-cards */
+div.player-card {
+    min-width: 25%;
+    background-color: rgb(3,118,150);
+}
 .player-card img {
     width: 93%;
     max-width: 160px;
 }
-
 .player-card p {
     margin-bottom: 0;
 }
-
 button.removeFromTeam {
     width: 90%;
     margin: 0.5rem 5%;
