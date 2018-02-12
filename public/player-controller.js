@@ -147,7 +147,7 @@ var PlayerController = function() {
               <span class="player-position mr-3" style="white-space: nowrap"><small>position: </small>${player.position}</span>
               <span class="player-team" style="white-space: nowrap"><small>team: </small>${player.pro_team}</span>
             </div>
-            <button class="addToTeam btn btn-primary px-3 mt-2" data-playerID="${player.id}">Add to Team</button>
+            <button class="addToTeam btn btn-info px-3 mt-2" data-playerID="${player.id}">Add to Team</button>
           </li>
         `
       })  
