@@ -89,7 +89,8 @@ var PlayerController = function() {
   // Split up a players array into a nested array with elements containing no more than a given number of players each
   function paginate(players, paginationLength) {
     var paginatedPlayers = []
-    for (var i = 1; i < players.length/paginationLength; i++) {
+    var numberOfPages = Math.ceil(players.length/paginationLength)
+    for (var i = 1; i <= numberOfPages; i++) {
       paginatedPlayers.unshift(players.slice( ((i-1) * paginationLength), (i * paginationLength) ) )
     }
     return paginatedPlayers
